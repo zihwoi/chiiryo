@@ -19,3 +19,14 @@ a {
 a:hover {
     text-decoration: underline;
 }
+
+/* Notification Styles */
+.flash-message {
+    background-color: #e7f3fe; /* Light blue background */
+    color: #31708f; /* Dark blue text */
+    border: 1px solid #bcdff1; /* Light blue border */
+    padding: 4px; /* Some padding around the text */
+    margin: 5px 0; /* Margin above and below the box */
+    border-radius: 0px; /* Rounded corners */
+    display: inline-block; /* To size the box to its content */
+}
