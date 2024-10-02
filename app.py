@@ -10,7 +10,14 @@ def home():
 
 @app.route('/about')
 def about():
-    return render_template('about.html')
+    fun_activities = [
+        "creating interactive web applications.",
+        "building fun games to play online.",
+        "designing beautiful user interfaces.",
+        "exploring new technologies and tools.",
+        "collaborating with creative minds."
+    ]
+    return render_template('about.html', fun_activities=fun_activities)
 
 @app.route('/contact', methods=['GET', 'POST'])
 def contact():

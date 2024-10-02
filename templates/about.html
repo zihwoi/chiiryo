@@ -8,7 +8,14 @@
 </head>
 <body>
     <h1>about chiiryo</h1>
-    <p>chiiryo is your creative project manager. Our goal is to help you manage your projects effectively and creatively.</p>
+    <p>chiiryo is your creative project manager. our goal is to help you manage your projects effectively and creatively.</p>
     <a href="/">back to home</a>
+
+    <h2>what we love to create</h2>
+    <ul>
+        {% for fun_activity in fun_activities %}
+            <li>{{ fun_activity }}</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
