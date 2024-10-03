@@ -63,7 +63,7 @@ def init_routes(app):
     def manage_projects():
         if request.method == 'POST':
             project_name = request.form['project_name']
-            new_project = Project(name=project_name, user_id=1)  # Replace 1 with the logged-in user's ID
+            new_project = Project(title=project_title, description=project_description, user_id=1)  # Replace 1 with the logged-in user's ID
             db.session.add(new_project)
             db.session.commit()
             flash('Project created successfully!')

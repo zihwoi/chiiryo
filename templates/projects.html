@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Projects{% endblock %}
+
+{% block content %}
+    <h1>My Projects</h1>
+
+    <!-- Project Creation Form -->
+    <form method="POST" action="{{ url_for('manage_projects') }}">
+        <input type="text" name="project_title" placeholder="Enter project title" required>
+        <input type="text" name="project_description" placeholder="Enter project description" required>
+        <button type="submit">Create Project</button>
+    </form>
+
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for project in projects %}
+            <tr>
+                <td>{{ project.id }}</td>
+                <td>{{ project.name }}</td>
+                <td>{{ project.description }}</td>
+                <td>{{ project.created_at }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4">No projects found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
