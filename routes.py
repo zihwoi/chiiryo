@@ -2,6 +2,7 @@ from flask import jsonify, request, render_template, flash, redirect, url_for
 from models import db, User, Project, Milestone, Task
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
 def init_routes(app):
     @app.route('/')
     def home():
@@ -74,5 +75,29 @@ def init_routes(app):
             flash('Project created successfully!')
             return redirect(url_for('manage_projects'))
 
-        projects = Project.query.all()
+        #projects = Project.query.all()
+        page = request.args.get('page', 1, type=int)
+        projects = Project.query.paginate(page=page, per_page=8)  # Show 8 projects per page
         return render_template('projects.html', projects=projects)
+
+    @app.route('/edit_project/<int:project_id>', methods=['GET', 'POST'])
+    def edit_project(project_id):
+        project = Project.query.get_or_404(project_id)  # Fetch the project by ID
+    
+        if request.method == 'POST':
+            # Logic to update the project
+            project.title = request.form['project_title']
+            project.description = request.form['project_description']
+            db.session.commit()
+            flash('Project updated successfully!', 'success')
+            return redirect(url_for('manage_projects'))
+    
+        return render_template('edit_project.html', project=project)    
+
+    @app.route('/delete_project/<int:project_id>', methods=['POST'])
+    def delete_project(project_id):
+        project = Project.query.get_or_404(project_id)  # Fetch the project by ID
+        db.session.delete(project)  # Delete the project from the database
+        db.session.commit()  # Commit the changes to the database
+        flash('Project deleted successfully!', 'success')
+        return redirect(url_for('manage_projects'))

@@ -22,6 +22,8 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
+# Import routes after db initialization to prevent circular import
+from routes import init_routes  # Moved here to avoid circular import
 init_routes(app)  # Initialize routes    
 
 if __name__ == '__main__':
