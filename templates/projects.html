@@ -5,13 +5,20 @@
 {% block content %}
     <h1>My Projects</h1>
 
-    <!-- Project Creation Form -->
-    <form method="POST" action="{{ url_for('manage_projects') }}">
-        <input type="text" name="project_title" placeholder="Enter project title" required>
-        <input type="text" name="project_description" placeholder="Enter project description" required>
-        <button type="submit">Create Project</button>
-    </form>
+<!-- Project Creation Form -->
+<form method="POST" action="{{ url_for('manage_projects') }}" class="project-form">
+    <div class="form-group">
+        <label for="project_title">Project Title</label>
+        <input type="text" id="project_title" name="project_title" placeholder="Enter project title" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="project_description">Project Description</label>
+        <textarea id="project_description" name="project_description" placeholder="Enter project description" rows="4" required></textarea>
+    </div>
 
+    <button type="submit" class="btn-submit">Create Project</button>
+</form>
 
     <table>
         <thead>
@@ -26,7 +33,7 @@
             {% for project in projects %}
             <tr>
                 <td>{{ project.id }}</td>
-                <td>{{ project.name }}</td>
+                <td>{{ project.title }}</td>
                 <td>{{ project.description }}</td>
                 <td>{{ project.created_at }}</td>
             </tr>

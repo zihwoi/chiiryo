@@ -5,6 +5,20 @@ body {
     background-color: #f4f4f4;
 }
 
+input, textarea {
+    font-family: Arial, sans-serif; /* Ensures all form elements use Arial */
+    font-size: 14px; /* Optional: Set a consistent font size */
+    padding: 10px; /* Optional: Adds consistent padding */
+    border: 1px solid #ccc; /* Optional: Adds a clean border */
+    border-radius: 4px; /* Optional: Keeps the form simple with minimal styling */
+    width: 100%; /* Optional: Makes input and textarea fill available width */
+    box-sizing: border-box; /* Optional: Ensures padding doesn’t affect total width */
+}
+
+textarea {
+    resize: vertical; /* Allows vertical resizing but restricts horizontal resizing */
+}
+
 h1 {
     color: #333;
 }
@@ -29,4 +43,69 @@ a:hover {
     margin: 5px 0; /* Margin above and below the box */
     border-radius: 0px; /* Rounded corners */
     display: inline-block; /* To size the box to its content */
+}
+
+.project-form {
+    width: 100%;
+    max-width: 500px; /* Set a narrower width for simplicity */
+    margin: 20px;
+    padding: 10px;
+}
+
+.form-group {
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333; /* Darker color for better contrast */
+}
+
+input[type="text"], textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 3px; /* Reduced border radius */
+}
+
+input[type="text"]:focus, textarea:focus {
+    outline: none;
+    border-color: #007bff; /* Simple blue border on focus */
+}
+
+.btn-submit {
+    padding: 8px 12px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left; /* Align button text to the left */
+}
+
+.btn-submit:hover {
+    background-color: #0056b3; /* Slightly darker on hover */
+}
+
+
+table {
+    width: 100%;
+    border-collapse: collapse; /* Remove default space between cells */
+}
+
+th, td {
+    text-align: left;
+    padding: 10px; /* Add padding to create space between columns */
+    border-bottom: 1px solid #ccc; /* Add a bottom border for readability */
+}
+
+th {
+    background-color: #f2f2f2; /* Light background for table headers */
+}
+
+td {
+    font-size: 14px;
 }

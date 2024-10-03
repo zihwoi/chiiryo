@@ -62,10 +62,15 @@ def init_routes(app):
     @app.route('/api/projects', methods=['GET', 'POST'])
     def manage_projects():
         if request.method == 'POST':
-            project_name = request.form['project_name']
+            project_title = request.form['project_title']
+            project_description = request.form['project_description']
+            user_id = 1  # Replace this with the actual logged-in user's ID
+
             new_project = Project(title=project_title, description=project_description, user_id=1)  # Replace 1 with the logged-in user's ID
+
             db.session.add(new_project)
             db.session.commit()
+            
             flash('Project created successfully!')
             return redirect(url_for('manage_projects'))
 
