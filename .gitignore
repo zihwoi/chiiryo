@@ -1,0 +1,7 @@
+# Ignore config files with sensitive info
+config.py
+.env
+__pycache__/
+*.pyc
+*.log
+*.sqlite3

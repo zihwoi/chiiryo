@@ -1,4 +1,10 @@
 from flask import Flask, render_template, flash, request
+from dotenv import load_dotenv
+import os
+
+load_dotenv()  # Load environment variables from .env
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 
 # No need to specify template_folder since it's the default
 app = Flask(__name__)
@@ -35,3 +41,4 @@ def contact():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
