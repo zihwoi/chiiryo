@@ -9,7 +9,7 @@ def init_routes(app):
         return jsonify(message="Welcome to the API")
 
     # About route (if needed, can still render HTML or return JSON)
-    @app.route('/about')
+    @app.route('/api/about')
     def about():
         fun_activities = [
             "creating interactive web applications.",

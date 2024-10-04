@@ -1,9 +1,10 @@
-from flask import Flask
+from flask import Flask, jsonify, send_from_directory, abort
 from dotenv import load_dotenv
 from flask_sqlalchemy import SQLAlchemy
 import os
 from models import db # Import the db object
 from routes import init_routes  # Import the init_routes function
+from flask_cors import CORS
 
 load_dotenv()  # Load environment variables from .env
 
@@ -11,6 +12,7 @@ load_dotenv()  # Load environment variables from .env
 # app = Flask(__name__)
 app = Flask(__name__, static_folder='frontend/build/static', static_url_path='/static')  # Set static folder for React
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
+CORS(app)  # This will enable CORS for all routes
 
 # MySQL database configuration using environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@localhost/{os.getenv('DB_NAME')}"
@@ -31,9 +33,13 @@ init_routes(app)  # Initialize routes
 @app.route('/<path:path>')
 def serve_react_app(path):
     if path and path.startswith('api'):
-        # If the path starts with 'api', it will be handled by Flask routes
-        return  # Don't interfere with API routes
-    return send_from_directory('frontend/build', 'index.html')
+        # Let the API routes handle the request
+        abort(404)  # or simply return None, but abort is cleaner
+    try:
+        return send_from_directory('frontend/build', path)
+    except FileNotFoundError:
+        # If the file isn't found, serve the React app's index.html
+        return send_from_directory('frontend/build', 'index.html')
 
 # # Import routes after db initialization to prevent circular import
 # from routes import init_routes  # Moved here to avoid circular import
