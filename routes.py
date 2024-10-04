@@ -2,7 +2,6 @@ from flask import jsonify, request, render_template, flash, redirect, url_for
 from models import db, User, Project, Milestone, Task
 from werkzeug.security import generate_password_hash, check_password_hash
 
-
 def init_routes(app):
     @app.route('/')
     def home():
