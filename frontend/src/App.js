@@ -1,15 +1,27 @@
 // src/App.js
-import React from 'react';
-import MyComponent from './MyComponent'; // Import your custom component
 
-function App() {
-  return (
-    <div>
-      <h1>Welcome to My React App!</h1> {/* Change the title */}
-      <p>This is a simple React application to demonstrate changes.</p>
-      <MyComponent /> {/* Use your custom component */}
-    </div>
-  );
-}
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Home from './Home';
+import About from './About'; // Don't forget to import About component
+import Contact from './Contact'; // Don't forget to import Contact component
+import Projects from './Projects';
+
+const App = () => {
+    return (
+        <Router>
+            <div>
+                <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/projects" element={<Projects />} />
+                    {/* Add other routes here */}
+                </Routes>
+            </div>
+        </Router>
+    );
+};
 
 export default App;
