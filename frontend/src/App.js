@@ -1,6 +1,7 @@
 // src/App.js
 
 import React from 'react';
+import './/style.css'; // Import CSS here for global styles
 import { Routes, Route } from 'react-router-dom';
 import NavBar from './NavBar';
 import Home from './Home';

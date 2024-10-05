@@ -1,4 +1,5 @@
 import React from 'react';
+import './/style.css'; // Import CSS here for global styles
 
 const Contact = () => {
   return (

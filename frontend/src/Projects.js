@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import './/style.css'; // Import CSS here for global styles
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);

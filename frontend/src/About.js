@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './/style.css'; // Import CSS here for global styles
+
 
 const About = () => {
     const [funActivities, setFunActivities] = useState([]);
