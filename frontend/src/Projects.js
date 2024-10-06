@@ -8,10 +8,11 @@ const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [projectTitle, setProjectTitle] = useState('');
     const [projectDescription, setProjectDescription] = useState('');
+    
 
     useEffect(() => {
         // Fetch projects from your Flask backend
-        axios.get('/api/projects') // Update with your actual API endpoint
+        axios.get('http://127.0.0.1:5000/api/projects') // Update with your actual API endpoint
             .then(response => {
                 setProjects(response.data);
             })
@@ -35,7 +36,7 @@ const Projects = () => {
     };
 
     const handleDelete = (id) => {
-        axios.post(`/api/delete_project/${id}`) // Update with your actual API endpoint
+        axios.delete(`/api/delete_project/${id}`) // Update with your actual API endpoint
             .then(() => {
                 // Remove the deleted project from the list
                 setProjects(projects.filter(project => project.id !== id));

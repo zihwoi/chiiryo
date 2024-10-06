@@ -21,6 +21,14 @@ class Project(db.Model):
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S")  # Format datetime as string
+        }
+
 class Milestone(db.Model):
     __tablename__ = 'milestones'
     
