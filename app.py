@@ -12,7 +12,7 @@ load_dotenv()  # Load environment variables from .env
 # app = Flask(__name__)
 app = Flask(__name__, static_folder='frontend/build/static', static_url_path='/static')  # Set static folder for React
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
-CORS(app)  # This will enable CORS for all routes
+CORS(app)  # This enables CORS for all routes
 
 # MySQL database configuration using environment variables
 app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+pymysql://{os.getenv('DB_USERNAME')}:{os.getenv('DB_PASSWORD')}@localhost/{os.getenv('DB_NAME')}"
