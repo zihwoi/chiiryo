@@ -24,9 +24,11 @@ class Project(db.Model):
     def to_dict(self):
         return {
             'id': self.id,
+            'user_id': self.user_id,
             'title': self.title,
             'description': self.description,
             'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S")  # Format datetime as string
+            
         }
 
 class Milestone(db.Model):
