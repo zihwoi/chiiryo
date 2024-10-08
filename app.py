@@ -26,7 +26,11 @@ login_manager.init_app(app)  # Pass the app instance to the LoginManager
 
 
 # Initialize routes
-init_routes(app)  # Initialize routes
+try:
+    init_routes(app)  # Initialize routes
+    print("Routes initialized successfully.")
+except Exception as e:
+    print(f"Error initializing routes: {e}")
 
 # Route to serve the React app
 @app.route('/', defaults={'path': ''})

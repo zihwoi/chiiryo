@@ -10,43 +10,49 @@ def init_routes(app):
     @app.route('/')
     def home():
         return jsonify(message="Welcome to the API")
+    
     # User registration
     @app.route('/api/register', methods=['POST'])
     def register():
         data = request.get_json()
-        username = data['username']
-        password = data['password']
+        username = data.get('username')
+        email = data.get('email')
+        password = data.get('password')
 
-        # Check if username already exists
-        if User.query.filter_by(username=username).first():
-            return jsonify({"error": "Username already exists"}), 400
+        # Basic validation to check if the fields are provided
+        if not username or not email or not password:
+            return jsonify({'message': 'All fields are required!'}), 400
 
-        hashed_password = generate_password_hash(password)
-        new_user = User(username=username, password=hashed_password)
+        # Check if user already exists
+        if User.query.filter((User.username == username) | (User.email == email)).first():
+            return jsonify({'message': 'User already exists!'}), 409
+
+        new_user = User(username=username, email=email)
+        new_user.set_password(password)
+
         db.session.add(new_user)
         db.session.commit()
 
-        return jsonify({"message": "Registration successful! Please log in."}), 201
-
-     # User login
+        return jsonify({'message': 'User registered successfully!'}), 201
+    
+    # User login
     @app.route('/api/login', methods=['POST'])
     def login():
         data = request.get_json()
-        username = data['username']
-        password = data['password']
-        
-        # Validate input
-        if not username or not password:
-            return jsonify({"error": "Username and password are required."}), 400
+        email = data.get('email')
+        password = data.get('password')
 
-        user = User.query.filter_by(username=username).first()
+        # Basic validation to check if the fields are provided
+        if not email or not password:
+            return jsonify({'message': 'Both email and password are required!'}), 400
 
-        if user and check_password_hash(user.password, password):
+        user = User.query.filter_by(email=email).first()  # Corrected to filter by email
+        if user and user.check_password(password):
             login_user(user)  # Login the user using Flask-Login
             return jsonify({"message": "Login successful!"}), 200
 
-        return jsonify({"message": "Invalid username or password."}), 401
-
+        return jsonify({'message': 'Login failed. Check your credentials.'}), 401
+        
      # User logout
     @app.route('/api/logout', methods=['POST'])
     @login_required
