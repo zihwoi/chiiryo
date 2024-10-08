@@ -5,6 +5,7 @@ import os
 from models import db # Import the db object
 from routes import init_routes  # Import the init_routes function
 from flask_cors import CORS
+from flask_login import LoginManager
 
 load_dotenv()  # Load environment variables from .env
 
@@ -20,10 +21,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize SQLAlchemy
 db.init_app(app)
+login_manager = LoginManager()  # Create the LoginManager instance
+login_manager.init_app(app)  # Pass the app instance to the LoginManager
 
-# Create the database tables
-with app.app_context():
-    db.create_all()
 
 # Initialize routes
 init_routes(app)  # Initialize routes
