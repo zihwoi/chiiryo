@@ -64,29 +64,42 @@ def init_routes(app):
     def manage_projects():
         if request.method == 'POST':
             data = request.get_json()
-            project_title = data['project_title']
-            project_description = data['project_description']
+            title = data['title']
+            description = data['description']
             user_id = 1  # Replace with the actual logged-in user's ID
 
-            new_project = Project(title=project_title, description=project_description, user_id=user_id)
+            new_project = Project(title=title, description=description, user_id=user_id)
             db.session.add(new_project)
             db.session.commit()
             return jsonify({"message": "Project created successfully!"}), 201
 
         page = request.args.get('page', 1, type=int)
-        projects = Project.query.paginate(page=page, per_page=8)
+        projects = Project.query.paginate(page=page, per_page=14)
         return jsonify([project.to_dict() for project in projects.items]), 200  # Assuming to_dict() method exists
 
-    # API for editing a project
     @app.route('/api/projects/<int:project_id>', methods=['PUT'])
-    def edit_project(project_id):
+    def update_project(project_id):
         project = Project.query.get_or_404(project_id)
-
         data = request.get_json()
-        project.title = data['project_title']
-        project.description = data['project_description']
-        db.session.commit()
-        return jsonify({"message": "Project updated successfully!"}), 200
+
+        if not data or 'title' not in data or 'description' not in data:
+            return jsonify({"error": "Invalid input"}), 400
+
+        title = data['title']
+        description = data['description']
+        
+        project.title = title
+        project.description = description
+        
+        try:
+            db.session.commit()
+        except Exception as e:
+            # Handle exceptions (e.g., database errors)
+            db.session.rollback()  # Roll back the session in case of an error
+            return jsonify({"error": str(e)}), 500
+        
+         # Return the updated project as a response
+        return jsonify({"message": "Project updated successfully!", "project": project.serialize()}), 200
 
     # API for deleting a project
     @app.route('/api/projects/<int:project_id>', methods=['DELETE'])
@@ -95,6 +108,11 @@ def init_routes(app):
         db.session.delete(project)
         db.session.commit()
         return jsonify({"message": "Project deleted successfully!"}), 200
+
+
+    @app.route('/api/projects/<int:project_id>', methods=['OPTIONS'])
+    def options_project(project_id):
+        return jsonify({"message": "CORS preflight response"}), 200
 
 #serving the html loading of the app
 # def init_routes(app):
