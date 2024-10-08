@@ -6,37 +6,76 @@ import './/style.css'; // Import CSS here for global styles
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
-    const [projectTitle, setProjectTitle] = useState('');
-    const [projectDescription, setProjectDescription] = useState('');
+    const [editingProjectId, setEditingProjectId] = useState(null);
+    const [title, setTitle] = useState('');
+    const [description, setDescription] = useState('');
     
-
+    //fetch projects from backend
     useEffect(() => {
-        // Fetch projects from your Flask backend
-        axios.get('http://127.0.0.1:5000/api/projects') // Update with your actual API endpoint
+        fetchProjects();
+    }, []);
+
+    const fetchProjects = () => {
+        axios.get('http://127.0.0.1:5000/api/projects')
             .then(response => {
                 setProjects(response.data);
             })
             .catch(error => {
                 console.error('Error fetching projects:', error);
             });
-    }, []);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        axios.post('/api/manage_projects', { title: projectTitle, description: projectDescription })
+        if (editingProjectId) {
+            // Update existing project
+            axios.put(`http://127.0.0.1:5000/api/projects/${editingProjectId}`, {
+                title: title,
+                description: description
+            })
             .then(response => {
-                // Refresh project list after creating a new project
+                console.log('Updated project data:', response.data); // Log updated project
+    
+                // Since response.data is the updated project, set it directly
+                setProjects(projects.map(project =>
+                    project.id === editingProjectId ? response.data : project
+                ));
+                resetForm();
+            })
+            .catch(error => {
+                console.error('Error updating project:', error);
+            });
+        } else {
+            // Create new project
+            axios.post('http://127.0.0.1:5000/api/projects', { 
+                title: title, 
+                description: description 
+            })
+            .then(response => {
+                console.log('Created project data:', response.data); // Log created project
                 setProjects([...projects, response.data]);
-                setProjectTitle('');
-                setProjectDescription('');
+                resetForm();
             })
             .catch(error => {
                 console.error('Error creating project:', error);
             });
+        }
+    };
+    
+    const handleEdit = (project) => {
+        setTitle(project.title);
+        setDescription(project.description);
+        setEditingProjectId(project.id);
+    };
+
+    const resetForm = () => {
+        setTitle('');
+        setDescription('');
+        setEditingProjectId(null);
     };
 
     const handleDelete = (id) => {
-        axios.delete(`/api/delete_project/${id}`) // Update with your actual API endpoint
+        axios.delete(`http://127.0.0.1:5000/api/projects/${id}`) // Update with your actual API endpoint
             .then(() => {
                 // Remove the deleted project from the list
                 setProjects(projects.filter(project => project.id !== id));
@@ -53,32 +92,39 @@ const Projects = () => {
             {/* Project Creation Form */}
             <form onSubmit={handleSubmit} className="project-form">
                 <div className="form-group">
-                    <label htmlFor="project_title">Project Title</label>
+                    <label htmlFor="title">Project Title</label>
                     <input
                         type="text"
-                        id="project_title"
-                        name="project_title"
+                        id="title"
+                        name="title"
                         placeholder="Enter project title"
-                        value={projectTitle}
-                        onChange={(e) => setProjectTitle(e.target.value)}
+                        value={title}
+                        onChange={(e) => setTitle(e.target.value)}
                         required
                     />
                 </div>
 
                 <div className="form-group">
-                    <label htmlFor="project_description">Project Description</label>
+                    <label htmlFor="description">Project Description</label>
                     <textarea
-                        id="project_description"
-                        name="project_description"
+                        id="description"
+                        name="description"
                         placeholder="Enter project description"
                         rows="4"
-                        value={projectDescription}
-                        onChange={(e) => setProjectDescription(e.target.value)}
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
                         required
                     />
                 </div>
 
-                <button type="submit" className="btn-submit">Create Project</button>
+                <button type="submit" className="btn-submit">
+                    {editingProjectId ? 'Update Project' : 'Create Project'}
+                </button>
+                {editingProjectId && (
+                    <button type="button" onClick={resetForm} className="btn btn-cancel">
+                        Cancel Edit
+                    </button>
+                )}
             </form>
 
             <table>
@@ -101,6 +147,7 @@ const Projects = () => {
                                 <td>{project.created_at}</td>
                                 <td>
                                     <div className="button-group">
+                                        <button className="btn btn-edit" onClick={() => handleEdit(project)}>Edit</button>
                                         <button className="btn btn-delete" onClick={() => handleDelete(project.id)}>Delete</button>
                                     </div>
                                 </td>
