@@ -7,11 +7,10 @@ from models import db, User, Project, Milestone, Task # Import the db object
 from flask_cors import CORS
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-load_dotenv()  # Load environment variables from .env
+load_dotenv() 
 
-# No need to specify template_folder since it's the default
-# app = Flask(__name__)
-app = Flask(__name__, static_folder='frontend/build/static', static_url_path='/static')
+app = Flask(__name__)
+#app = Flask(__name__, static_folder='frontend/build/static', static_url_path='/static')
 
 app.secret_key = 'your_secret_key'  # Needed for flashing messages
 
@@ -74,6 +73,7 @@ def login():
         return jsonify({'message': 'Both email and password are required!'}), 400
 
     user = User.query.filter_by(email=email).first()
+
     if user and user.check_password(password):
         login_user(user)
         return jsonify({"message": "Login successful!"}), 200

@@ -15,6 +15,9 @@ class User(db.Model, UserMixin):
     password_hash = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+     # Relationship to Project (one-to-many)
+    projects = db.relationship('Project', backref='user', lazy=True, cascade="all, delete-orphan")
+
     def get_id(self):
         return str(self.id)
         
@@ -47,6 +50,16 @@ class Task(db.Model):
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
     due_date = db.Column(db.Date)
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'status': self.status.value,
+            'due_date': self.due_date.strftime("%Y-%m-%d") if self.due_date else None,
+            'created_at': self.created_at.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        
 class Project(db.Model):
     __tablename__ = 'projects'
     
@@ -55,6 +68,9 @@ class Project(db.Model):
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+
+    # Relationship to Milestones (one-to-many)
+    milestones = db.relationship('Milestone', backref='project', lazy=True, cascade="all, delete-orphan")
 
     def to_dict(self):
         return {
@@ -76,3 +92,5 @@ class Milestone(db.Model):
     due_date = db.Column(db.Date)
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
 
+    # Relationship to Tasks (one-to-many)
+    tasks = db.relationship('Task', backref='milestone', lazy=True, cascade="all, delete-orphan")
