@@ -9,7 +9,6 @@ import Contact from './Contact'; // Don't forget to import Contact component
 import Projects from './Projects';
 import Login from './Login';  // Import Login component
 import Register from './Register';  // Import Register component
-import ProtectedRoute from './ProtectedRoute'; // Import ProtectedRoute component
 
 const App = () => {
     return (
@@ -18,7 +17,7 @@ const App = () => {
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/projects" element={<ProtectedRoute element={<Projects />} />} />
+                <Route path="/api/projects" element={<Projects />} />
                 <Route path="/contact" element={<Contact />} /> {/* Contact route correctly wrapped */}
                 <Route path="/login" element={<Login />} /> {/* Add Login route */}
                 <Route path="/register" element={<Register />} /> {/* Add Register route */}
