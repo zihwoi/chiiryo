@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './/style.css'; // Import CSS here for global styles
 
 const NavBar = () => {
     return (
@@ -9,8 +8,10 @@ const NavBar = () => {
             <ul style={listStyle}>
                 <li style={listItemStyle}><Link to="/">Home</Link></li>
                 <li style={listItemStyle}><Link to="/about">About</Link></li>
-                <li style={listItemStyle}><Link to="/projects">Projects</Link></li>
+                <li style={listItemStyle}><Link to="/api/projects">Projects</Link></li>
                 <li style={listItemStyle}><Link to="/contact">Contact</Link></li>
+                <li style={listItemStyle}><Link to="/login">Login</Link></li> {/* Link to Login */}
+                <li style={listItemStyle}><Link to="/register">Register</Link></li> {/* Link to Register */}
             </ul>
         </nav>
     );

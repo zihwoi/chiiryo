@@ -4,15 +4,16 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router } from 'react-router-dom';
+import './style.css'; // Import CSS here for global styles
+import { AuthProvider } from './AuthContext'; // Ensure AuthProvider is imported
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Router>
-        <App />
-    </Router>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </Router>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

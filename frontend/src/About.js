@@ -2,8 +2,6 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './/style.css'; // Import CSS here for global styles
-
 
 const About = () => {
     const [funActivities, setFunActivities] = useState([]);
@@ -12,7 +10,7 @@ const About = () => {
     useEffect(() => {
         const fetchFunActivities = async () => {
             try {
-              const response = await axios.get('http://localhost:5000/api/about');
+                const response = await axios.get('http://localhost:5000/api/about');
                 setFunActivities(response.data.fun_activities); // Set the fetched data
             } catch (error) {
                 console.error("Error fetching the fun activities:", error);

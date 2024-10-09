@@ -2,21 +2,27 @@
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './/style.css'; // Import CSS here for global styles
 
 const Projects = () => {
     const [projects, setProjects] = useState([]);
     const [editingProjectId, setEditingProjectId] = useState(null);
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    
+
     //fetch projects from backend
     useEffect(() => {
         fetchProjects();
     }, []);
 
     const fetchProjects = () => {
-        axios.get('http://127.0.0.1:5000/api/projects')
+        const token = localStorage.getItem('token'); // Get the token from local storage
+
+        // Make sure to include the base URL if it's not defined elsewhere
+        axios.get('/api/projects', { // Correctly format the URL
+            headers: {
+                Authorization: `Bearer ${token}`, // Include token in headers
+            },
+        })
             .then(response => {
                 setProjects(response.data);
             })
@@ -27,41 +33,56 @@ const Projects = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const token = localStorage.getItem('token'); // Get the token from local storage
+
+        // Check if token exists before proceeding
+        if (!token) {
+            console.error('No token found, unable to submit project.');
+            return; // Exit the function early if no token
+        }
+
+        const headers = {
+            headers: {
+                Authorization: `Bearer ${token}`, // Include token in headers
+            },
+        };
+
         if (editingProjectId) {
             // Update existing project
-            axios.put(`http://127.0.0.1:5000/api/projects/${editingProjectId}`, {
+            axios.put(`/api/projects/${editingProjectId}`, {
                 title: title,
                 description: description
-            })
-            .then(response => {
-                console.log('Updated project data:', response.data); // Log updated project
-    
-                // Since response.data is the updated project, set it directly
-                setProjects(projects.map(project =>
-                    project.id === editingProjectId ? response.data : project
-                ));
-                resetForm();
-            })
-            .catch(error => {
-                console.error('Error updating project:', error);
-            });
+            }, headers) // Add headers here
+                .then(response => {
+                    console.log('Updated project data:', response.data); // Log updated project
+
+                    // Update the projects state with the modified project
+                    setProjects(projects.map(project =>
+                        project.id === editingProjectId ? response.data : project
+                    ));
+                    resetForm();
+                })
+                .catch(error => {
+                    console.error('Error updating project:', error);
+                });
         } else {
             // Create new project
-            axios.post('http://127.0.0.1:5000/api/projects', { 
-                title: title, 
-                description: description 
-            })
-            .then(response => {
-                console.log('Created project data:', response.data); // Log created project
-                setProjects([...projects, response.data]);
-                resetForm();
-            })
-            .catch(error => {
-                console.error('Error creating project:', error);
-            });
+            axios.post('/api/projects', {
+                title: title,
+                description: description
+            }, headers) // Add headers here
+                .then(response => {
+                    console.log('Created project data:', response.data); // Log created project
+                    setProjects([...projects, response.data]);
+                    resetForm();
+                })
+                .catch(error => {
+                    console.error('Error creating project:', error);
+                });
         }
     };
-    
+
     const handleEdit = (project) => {
         setTitle(project.title);
         setDescription(project.description);
@@ -75,7 +96,21 @@ const Projects = () => {
     };
 
     const handleDelete = (id) => {
-        axios.delete(`http://127.0.0.1:5000/api/projects/${id}`) // Update with your actual API endpoint
+        const token = localStorage.getItem('token'); // Get the token from local storage
+
+        // Check if token exists before proceeding
+        if (!token) {
+            console.error('No token found, unable to delete project.');
+            return; // Exit the function early if no token
+        }
+
+        const headers = {
+            headers: {
+                Authorization: `Bearer ${token}`, // Include token in headers
+            },
+        };
+
+        axios.delete(`/api/projects/${id}`, headers) // Include headers here
             .then(() => {
                 // Remove the deleted project from the list
                 setProjects(projects.filter(project => project.id !== id));
@@ -84,6 +119,7 @@ const Projects = () => {
                 console.error('Error deleting project:', error);
             });
     };
+
 
     return (
         <div>

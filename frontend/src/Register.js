@@ -1,12 +1,13 @@
 // Register.js
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Change useHistory to useNavigate
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const history = useHistory();
+    const [errorData, setErrorData] = useState(null); // Add state for error messages
+    const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,20 +22,20 @@ const Register = () => {
 
         if (response.ok) {
             // Registration successful, redirect to login or another page
-            history.push('/login');
+            navigate('/login'); // Use navigate instead of history.push
         } else {
-            // Handle registration error (show a message, etc.)
+            const errorData = await response.json(); // Get error data from response
             console.error('Registration failed:', errorData.message); // Log the error message
 
-            // Optionally, show the error message to the user
-            alert(`Registration failed: ${errorData.message}`);
+            // Show the error message to the user
+            setErrorData(`Registration failed: ${errorData.message}`); // Set error message in state
         }
-        
     };
 
     return (
         <form onSubmit={handleSubmit}>
             <h1>Register</h1>
+            {errorData && <p style={{ color: 'red' }}>{errorData}</p>} {/* Display error message */}
             <input
                 type="text"
                 placeholder="Username"
